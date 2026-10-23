@@ -1,13 +1,291 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN" data-bs-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>bs-demo</title>
+    <title>Bootstrap 6 组件示例</title>
   </head>
   <body>
-    <div id="app"></div>
+    <main class="container py-5 px-3">
+      <header class="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <div class="me-auto">
+          <h1 class="mb-2">Bootstrap 6 组件示例</h1>
+          <p class="fg-3 mb-0">npm 全量引入 Bootstrap 6（Sass 源码 + ESM JavaScript），演示 Dialog、表单、Tooltip、Popover、Alert 等组件。</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge badge-subtle theme-primary" id="bsVersion">Bootstrap</span>
+          <button type="button" class="btn-outline theme-secondary" id="themeToggle">深色模式</button>
+        </div>
+      </header>
+
+      <section class="card mb-4">
+        <div class="card-body">
+          <h2 class="fs-md fw-semibold mb-2">表单对话框</h2>
+          <p class="fg-3">点击下面的按钮打开 Dialog，其中包含文本输入、下拉选择、Combobox、日期选择器、Checkbox / Radio / Switch、Range、Tooltip、Popover、Menu、Alert 与 Toast 示例。</p>
+          <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn-solid theme-primary" data-bs-toggle="dialog" data-bs-target="#demoDialog">打开表单对话框</button>
+            <button type="button" class="btn-outline theme-secondary" id="openDialogByJs">用 JS 打开</button>
+            <button type="button" class="btn-subtle theme-secondary" data-bs-toggle="dialog" data-bs-target="#demoDialog" data-bs-backdrop="static">静态背景</button>
+          </div>
+          <p class="form-text mt-3 mb-0" id="dialogStatus">Dialog 状态：尚未打开。</p>
+        </div>
+      </section>
+
+      <div id="pageAlertPlaceholder" class="grid grid-cols-1 gap-2"></div>
+
+      <section class="card">
+        <div class="card-body">
+          <h2 class="fs-md fw-semibold mb-2">提交结果</h2>
+          <pre class="demo-result bg-body border rounded-3 p-3 mb-0"><code id="demoResult">尚未提交表单。</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="dialog dialog-lg dialog-scrollable" id="demoDialog">
+      <div class="dialog-header">
+        <h1 class="dialog-title">用户信息登记</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="关闭"></button>
+      </div>
+      <div class="dialog-body">
+        <div id="dialogAlertPlaceholder" class="grid grid-cols-1 gap-2"></div>
+        <div class="alert theme-info mb-5" role="alert">
+          <p>对话框内可以直接使用浮层组件：Tooltip、Popover、Menu、Datepicker 与 Toast 都会渲染在浏览器的 top layer 中。</p>
+        </div>
+        <form id="demoForm" class="grid grid-cols-1 gap-5" data-bs-validate="valid" novalidate>
+          <fieldset class="grid grid-cols-1 gap-3">
+            <legend class="form-label fw-semibold fs-md">基础输入</legend>
+            <div class="grid gap-3">
+              <div class="form-field g-col-12 sm:g-col-6">
+                <label for="demoName" class="form-label">姓名</label>
+                <input type="text" class="form-control" id="demoName" name="name" placeholder="张三" required aria-describedby="demoNameFeedback" />
+                <div id="demoNameFeedback" class="invalid-feedback">请填写姓名</div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-6">
+                <label for="demoEmail" class="form-label">邮箱</label>
+                <div class="input-group">
+                  <span class="input-group-text" id="demoEmailAddon">@</span>
+                  <input type="email" class="form-control" id="demoEmail" name="email" placeholder="name@example.com" required aria-describedby="demoEmailAddon demoEmailFeedback" />
+                </div>
+                <div id="demoEmailFeedback" class="invalid-feedback">请输入有效的邮箱地址</div>
+              </div>
+            </div>
+            <div class="grid gap-3">
+              <div class="form-field g-col-12 sm:g-col-6">
+                <label for="demoPassword" class="form-label">密码</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="demoPassword" name="password" placeholder="至少 6 位" minlength="6" required aria-describedby="demoPasswordFeedback" />
+                  <button class="btn-outline theme-secondary input-group-btn" type="button" id="togglePassword">显示</button>
+                </div>
+                <div id="demoPasswordFeedback" class="invalid-feedback">密码至少需要 6 位</div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-6">
+                <div class="form-floating">
+                  <label for="demoPhone">手机号</label>
+                  <input type="tel" class="form-control" id="demoPhone" name="phone" placeholder="手机号" pattern="1[0-9]{10}" />
+                </div>
+                <small class="form-text">浮动标签（form-floating）写法，输入后标签会上浮。</small>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="demoNotes" class="form-label">备注</label>
+              <textarea class="form-control" id="demoNotes" name="notes" rows="3" maxlength="200" placeholder="想补充的内容…"></textarea>
+              <small class="form-text"><span id="demoNotesCount">0</span> / 200</small>
+            </div>
+          </fieldset>
+
+          <fieldset class="grid grid-cols-1 gap-3">
+            <legend class="form-label fw-semibold fs-md">下拉与日期</legend>
+            <div class="grid gap-3">
+              <div class="form-field g-col-12 sm:g-col-6">
+                <label for="demoCountry" class="form-label">国家 / 地区（原生 select）</label>
+                <select class="form-control" id="demoCountry" name="country" required aria-describedby="demoCountryFeedback">
+                  <option value="" selected disabled>请选择…</option>
+                  <option value="cn">中国</option>
+                  <option value="us">美国</option>
+                  <option value="jp">日本</option>
+                  <option value="de">德国</option>
+                </select>
+                <div id="demoCountryFeedback" class="invalid-feedback">请选择国家或地区</div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-6">
+                <label class="form-label">技术栈（Combobox，可搜索多选）</label>
+                <button class="form-control combobox-toggle" type="button" data-bs-toggle="combobox" data-bs-name="skills" data-bs-placeholder="请选择技术栈…" data-bs-search="true" data-bs-multiple="true">
+                  <span class="combobox-value">请选择技术栈…</span>
+                  <svg class="combobox-caret" width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0.46967 5.46967C0.762563 5.17678 1.23744 5.17678 1.53033 5.46967L5 8.93934L8.46967 5.46967C8.76256 5.17678 9.23744 5.17678 9.53033 5.46967C9.82322 5.76256 9.82322 6.23744 9.53033 6.53033L5.53033 10.5303C5.23744 10.8232 4.76256 10.8232 4.46967 10.5303L0.46967 6.53033C0.176777 6.23744 0.176777 5.76256 0.46967 5.46967Z" fill="currentcolor"/></svg>
+                </button>
+                <div class="menu">
+                  <div class="combobox-search">
+                    <input type="text" class="form-control combobox-search-input" placeholder="搜索…" autocomplete="off" aria-label="搜索技术栈" />
+                  </div>
+                  <div class="menu-header">前端</div>
+                  <button class="menu-item" type="button" data-bs-value="html">HTML</button>
+                  <button class="menu-item" type="button" data-bs-value="css">CSS</button>
+                  <button class="menu-item" type="button" data-bs-value="js">JavaScript</button>
+                  <div class="menu-header">后端</div>
+                  <button class="menu-item" type="button" data-bs-value="node">Node.js</button>
+                  <button class="menu-item" type="button" data-bs-value="python">Python</button>
+                  <button class="menu-item" type="button" data-bs-value="go">Go</button>
+                </div>
+                <small class="form-text">Combobox 会生成一个 name="skills" 的隐藏 input，提交时自动带上所选值。</small>
+              </div>
+            </div>
+            <div class="grid gap-3">
+              <div class="form-field g-col-12 sm:g-col-4">
+                <label for="demoDate" class="form-label">入职日期（Datepicker）</label>
+                <input type="text" class="form-control" id="demoDate" name="startDate" data-bs-toggle="datepicker" autocomplete="off" placeholder="选择日期…" required aria-describedby="demoDateFeedback" />
+                <div id="demoDateFeedback" class="invalid-feedback">请选择入职日期</div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-4">
+                <label for="demoDateRange" class="form-label">休假区间（范围选择）</label>
+                <input type="text" class="form-control" id="demoDateRange" name="vacation" data-bs-toggle="datepicker" data-bs-selection-mode="multiple-ranged" autocomplete="off" placeholder="开始与结束日期…" />
+              </div>
+              <div class="form-field g-col-12 sm:g-col-4">
+                <label for="demoDateLimited" class="form-label">活动日期（限 2026 年）</label>
+                <input type="text" class="form-control" id="demoDateLimited" name="eventDate" data-bs-toggle="datepicker" data-bs-date-min="2026-01-01" data-bs-date-max="2026-12-31" data-bs-first-weekday="0" autocomplete="off" placeholder="选择日期…" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="demoNativeDate" class="form-label">生日（原生 date 输入）</label>
+              <input type="date" class="form-control w-12" id="demoNativeDate" name="birthday" />
+            </div>
+          </fieldset>
+          <fieldset class="grid grid-cols-1 gap-3">
+            <legend class="form-label fw-semibold fs-md">偏好选择</legend>
+            <div class="grid gap-4">
+              <div class="form-field g-col-12 sm:g-col-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="demoProduct" name="product" value="yes" checked />
+                  <label class="form-check-label" for="demoProduct">产品动态</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="demoSecurity" name="security" value="yes" />
+                  <label class="form-check-label" for="demoSecurity">安全提醒</label>
+                </div>
+                <div class="form-check form-check-disabled">
+                  <input class="form-check-input" type="checkbox" id="demoBetaMail" name="beta" value="yes" disabled />
+                  <label class="form-check-label" for="demoBetaMail">Beta 内测（不可选）</label>
+                </div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="frequency" id="demoDaily" value="daily" />
+                  <label class="form-check-label" for="demoDaily">每天</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="frequency" id="demoWeekly" value="weekly" checked />
+                  <label class="form-check-label" for="demoWeekly">每周</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="frequency" id="demoMonthly" value="monthly" />
+                  <label class="form-check-label" for="demoMonthly">每月</label>
+                </div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-4">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="demoPush" name="push" value="on" checked />
+                  <label class="form-check-label" for="demoPush">开启推送通知</label>
+                </div>
+                <div class="form-check form-switch form-check-disabled">
+                  <input class="form-check-input" type="checkbox" role="switch" id="demoAutoVerify" name="autoVerify" value="on" disabled checked />
+                  <label class="form-check-label" for="demoAutoVerify">自动校验（不可改）</label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="grid grid-cols-1 gap-3">
+            <legend class="form-label fw-semibold fs-md">范围与浮层</legend>
+            <div class="form-field">
+              <label for="demoRange" class="form-label">满意度（Range）</label>
+              <input type="range" class="form-range w-12" id="demoRange" name="satisfaction" min="0" max="100" step="5" value="80" />
+              <output class="form-text" id="demoRangeValue">80</output>
+            </div>
+            <div class="grid gap-3">
+              <div class="form-field g-col-12 sm:g-col-6">
+                <span class="form-label d-block">Tooltip（悬停触发）</span>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="button" class="btn-outline theme-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="顶部 Tooltip">Top</button>
+                  <button type="button" class="btn-outline theme-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="右侧 Tooltip">Right</button>
+                  <button type="button" class="btn-outline theme-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="底部 Tooltip">Bottom</button>
+                  <button type="button" class="btn-outline theme-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="左侧 Tooltip">Left</button>
+                  <button type="button" class="btn-outline theme-secondary form-check-disabled" data-bs-toggle="tooltip" title="不可用" disabled>Disabled</button>
+                </div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-6">
+                <span class="form-label d-block">Popover（点击触发）</span>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="button" class="btn-outline theme-secondary" data-bs-toggle="popover" data-bs-title="普通 Popover" data-bs-content="这是 Popover 的正文内容。">点击弹出</button>
+                  <button type="button" class="btn-outline theme-secondary" data-bs-toggle="popover" data-bs-html="true" data-bs-title="HTML Popover" data-bs-content="<em>支持</em> <strong>HTML</strong> 与 <a href='#' class='alert-link'>链接</a>">HTML Popover</button>
+                </div>
+              </div>
+            </div>
+            <div class="grid gap-3">
+              <div class="form-field g-col-12 sm:g-col-4">
+                <span class="form-label d-block">Menu（下拉菜单）</span>
+                <button type="button" class="btn-outline theme-secondary" data-bs-toggle="menu" data-bs-target="#demoMenu" aria-expanded="false">选择操作</button>
+                <ul class="menu" id="demoMenu">
+                  <li><button type="button" class="menu-item" data-demo-action="插入 Alert">插入 Alert</button></li>
+                  <li><button type="button" class="menu-item" data-demo-action="弹出 Toast">弹出 Toast</button></li>
+                  <li class="menu-divider" role="separator"></li>
+                  <li><button type="button" class="menu-item" data-demo-action="重置表单">重置表单</button></li>
+                </ul>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-4">
+                <span class="form-label d-block">快捷操作</span>
+                <div class="d-flex flex-wrap gap-2">
+                  <button type="button" class="btn-outline theme-secondary" id="dialogAlertBtn">插入 Alert</button>
+                  <button type="button" class="btn-outline theme-secondary" id="dialogToastBtn">弹出 Toast</button>
+                </div>
+              </div>
+              <div class="form-field g-col-12 sm:g-col-4">
+                <span class="form-label d-block">最近操作</span>
+                <input type="text" class="form-control form-control-readonly" id="demoActionValue" value="（无）" readonly />
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        <div class="grid grid-cols-1 gap-2 mt-5">
+          <div class="alert theme-success" role="alert">
+            <p>成功：这是一个带 <a href="#" class="alert-link">链接</a> 的 success alert。</p>
+          </div>
+          <div class="alert theme-warning" role="alert">
+            <p>警告：这个 alert 可以用右上角关闭按钮移除。</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+          </div>
+          <div class="alert theme-danger" role="alert">
+            <p>错误：提交校验失败时会显示类似提示。</p>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button type="reset" class="btn-subtle theme-secondary" form="demoForm">重置</button>
+        <div class="ms-auto d-flex gap-2">
+          <button type="button" class="btn-outline theme-secondary" data-bs-dismiss="dialog">取消</button>
+          <button type="submit" class="btn-solid theme-primary" form="demoForm">提交表单</button>
+        </div>
+      </div>
+
+      <div class="toast" id="dialogToast" role="status" aria-live="polite" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">对话框 Toast</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="关闭"></button>
+        </div>
+        <div class="toast-body">这条 Toast 渲染在 dialog 的 top layer 中。</div>
+      </div>
+    </dialog>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div class="toast" id="pageToast" role="status" aria-live="polite" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">提交成功</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="关闭"></button>
+        </div>
+        <div class="toast-body" id="pageToastBody">表单数据已在浏览器内解析完成。</div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

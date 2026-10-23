@@ -1,0 +1,8 @@
+// 全量引入 Bootstrap 6 的 Sass 源码（等价于 dist/css/bootstrap.css）
+@use "bootstrap/scss/bootstrap";
+
+// 示例页面专用的少量补充样式
+.demo-result {
+  max-height: 18rem;
+  overflow-y: auto;
+}
